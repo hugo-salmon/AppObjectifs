@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titre}>Activités disponibles : </Text>
+      <Text style={styles.title}>Activités disponibles : </Text>
       
       <FlatList
         data={sampleGoals}
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-  titre: {
+  title: {
     fontSize: 25,
     color: "white",
     marginBottom: 20
