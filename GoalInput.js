@@ -19,16 +19,16 @@ const GoalInput = ({ onAdd }) => {
         },
         {
           text: 'Ajouter',
-          onPress: handleAdd,
-          disabled: newGoal.trim() === '', // Désactiver le bouton si l'input est vide
+          onPress: addNewGoal,
+          disabled: newGoal.trim() === '',
         },
       ],
     );
   };
 
-  const handleAdd = () => {
+  const addNewGoal = () => {
     if (newGoal.trim() !== '') {
-      onAdd(`- ${newGoal.trim()}`);
+      onAdd(newGoal.trim());
       setNewGoal('');
     }
   };
@@ -82,6 +82,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  placeholderText: {
+    position: 'absolute',
+    top: 10,
+    left: 20,
+    color: 'white',
   },
 });
 

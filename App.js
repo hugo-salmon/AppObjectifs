@@ -5,16 +5,16 @@ import GoalInput from './GoalInput';
 
 const App = () => {
   const [sampleGoals, setSampleGoals] = useState([
-    "- Faire les courses",
-    "- Aller à la salle de sport 3 fois par semaine",
-    "- Monter à plus de 5000 m d'altitude",
-    "- Acheter mon premier appartement",
-    "- Perdre 5 kgs",
-    "- Gagner en productivité",
-    "- Apprendre un nouveau langage",
-    "- Faire une mission en freelance",
-    "- Organiser un meetup autour de la tech",
-    "- Faire un triathlon",
+    "Faire du sport une fois par semaine",
+    "Monter en compétences dev",
+    "Améliorer mon rythme de sommeil",
+    "Faire de la veille technologique",
+    "Jouer à la console quotidiennement",
+    "Manger équilibré",
+    "Passer le permis",
+    "Maxer les 2 bases sur CoC",
+    "Faire 11 victoires en Fut Champions",
+    "Avoir une meuf"
   ]);
 
   const deleteGoal = (index) => {
@@ -29,8 +29,8 @@ const App = () => {
         {
           text: 'Supprimer',
           onPress: () => {
-            setSampleGoals((prevGoals) => {
-              const updatedGoals = [...prevGoals];
+            setSampleGoals((goals) => {
+              const updatedGoals = [...goals];
               updatedGoals.splice(index, 1);
               return updatedGoals;
             });
@@ -40,14 +40,39 @@ const App = () => {
     );
   };
 
+  const modifyGoal = (index) => {
+    Alert.prompt(
+      "Modifier l'objectif",
+      'Modifiez votre objectif :',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Modifier',
+          onPress: (newGoal) => {
+            setSampleGoals((goals) => {
+              const updatedGoals = [...goals];
+              updatedGoals[index] = newGoal.trim();
+              return updatedGoals;
+            });
+          },
+        },
+      ],
+      'plain-text',
+      sampleGoals[index] 
+    );
+  };
+
   const addGoal = (newGoal) => {
-    setSampleGoals((prevGoals) => [...prevGoals, newGoal]);
+    setSampleGoals((goals) => [...goals, newGoal]);
     Keyboard.dismiss();
   };
 
   return (
     <ImageBackground
-      source={require('./assets/backgroundimage.avif')} // Remplacez 'background.jpg' par le nom de votre image
+      source={require('./assets/backgroundimage.avif')}
       style={styles.backgroundImage}
     >
       <KeyboardAvoidingView
@@ -55,9 +80,9 @@ const App = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Objectifs de la semaine :</Text>
+          <Text style={styles.title}>Objectifs</Text>
 
-          <GoalList goals={sampleGoals} onDelete={deleteGoal} />
+          <GoalList goals={sampleGoals} onDelete={deleteGoal} onModify={modifyGoal}/>
 
           <GoalInput onAdd={addGoal} />
 
