@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 25,
+    fontSize: 30,
     color: 'white',
     marginBottom: 20,
   },
