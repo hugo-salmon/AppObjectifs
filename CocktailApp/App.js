@@ -1,24 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
+import CocktailsList from './CocktailsListScreen';
+import CocktailDetails from './CocktailDetails';
+import RandomCocktail from './RandomCocktailScreen';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const Homepage = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>tema l'app fdp</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen name="Cocktails List" component={CocktailsList} options={{ title: 'Cocktails List' }} />
+      <Stack.Screen name="CocktailDetails" component={CocktailDetails} options={{ title: 'Cocktail Details' }} />
+    </Stack.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text:{
-    color: 'blue',
-    fontSize: 32,
-  }
-});
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="MainStack" component={Homepage} options={{ tabBarLabel: 'Cocktails' }} />
+        <Tab.Screen name="Random Cocktail" component={SearchByIngredientScreen} options={{ tabBarLabel: 'Random Cocktail' }} />
+        <Tab.Screen name="RandomCocktail" component={RandomCocktailScreen} options={{ tabBarLabel: 'Random Cocktail' }} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
