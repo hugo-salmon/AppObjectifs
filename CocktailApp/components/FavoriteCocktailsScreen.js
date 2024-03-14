@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const FavoriteCocktails = ({ favorites, toggleFavorite }) => {
+const FavoriteCocktails = ({ favorites, toggleFavorite, clearAllFavorites }) => {
     const navigation = useNavigation();
   
     const navigateToCocktailDetails = (idDrink) => {
@@ -20,7 +21,7 @@ const FavoriteCocktails = ({ favorites, toggleFavorite }) => {
           <Text style={styles.cocktailName}>{item.strDrink}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toggleFavorite(item)} style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>❌</Text>
+          <Icon name="times-circle" size={32} color="red" />
         </TouchableOpacity>
       </View>
     );
@@ -44,6 +45,11 @@ const FavoriteCocktails = ({ favorites, toggleFavorite }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Cocktails Favoris</Text>
+        {favorites.length > 0 && (
+          <TouchableOpacity onPress={clearAllFavorites} style={styles.clearAllButton}>
+            <Text style={styles.clearAllButtonText}>Tout supprimer</Text>
+          </TouchableOpacity>
+        )}
         {content}
       </View>
     );
@@ -102,10 +108,7 @@ const styles = StyleSheet.create({
     padding: 8, 
     backgroundColor: 'rgba(255, 0, 0, 0.1)', 
     borderRadius: 15, 
-  },
-  deleteButtonText: {
-    fontSize: 18, 
-    color: '#ff0000', 
+    marginRight: 10
   },
   flatList: {
     width: '100%',
@@ -125,6 +128,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#007bff', 
     textDecorationLine: 'underline',
+  },
+  clearAllButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  clearAllButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 
