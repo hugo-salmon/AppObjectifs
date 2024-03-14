@@ -75,59 +75,58 @@ const renderIngredients = (cocktailDetails) => {
 };
 
 const styles = StyleSheet.create({
-    scrollView: {
-        backgroundColor: '#FFFFFF',
-      },
-      container: {
-        flex: 1,
-        padding: 20,
-        alignItems: 'center',
-        paddingBottom: 50, 
-      },
-    title: {
-      fontSize: 28,
-      fontWeight: 'bold',
-      color: '#2E2E2E', 
-      marginBottom: 20,
-      textAlign: 'center',
+  scrollView: {
+      backgroundColor: '#FFFFFF',
     },
-    subtitle: {
-      fontSize: 20,
-      fontWeight: '600',
-      color: '#4F4F4F',
-      marginTop: 10,
-      textAlign: 'left',
-      alignSelf: 'stretch',
+    container: {
+      flex: 1,
+      padding: 20,
+      alignItems: 'center',
+      paddingBottom: 50, 
     },
-    thumbnail: {
-      width: 320,
-      height: 320,
-      borderRadius: 160,
-      marginBottom: 20,
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 0.30,
-      shadowRadius: 4.65,
-      elevation: 8,
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#2E2E2E', 
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#4F4F4F',
+    marginTop: 10,
+    textAlign: 'left',
+    alignSelf: 'stretch',
+  },
+  thumbnail: {
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-    ingredientsContainer: {
-      alignSelf: 'stretch',
-      alignItems: 'flex-start',
-      marginTop: 10,
-    },
-    ingredient: {
-      fontSize: 17,
-      color: '#3C3C3C',
-      backgroundColor: '#EFEFEF', 
-      borderRadius: 5,
-      padding: 5,
-      marginBottom: 5,
-      overflow: 'hidden', 
-      textAlign: 'left',
-    },
-  });
+    shadowOpacity: 0.30,
+    shadowRadius: 4.65,
+  },
+  ingredientsContainer: {
+    alignSelf: 'stretch',
+    alignItems: 'flex-start',
+    marginTop: 10,
+  },
+  ingredient: {
+    fontSize: 17,
+    color: '#3C3C3C',
+    backgroundColor: '#EFEFEF', 
+    borderRadius: 5,
+    padding: 5,
+    marginBottom: 5,
+    overflow: 'hidden', 
+    textAlign: 'left',
+  }
+});
 
 export default CocktailDetails;

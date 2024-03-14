@@ -10,7 +10,7 @@ const FavoriteCocktails = ({ favorites, toggleFavorite }) => {
     };
   
     const navigateToCocktailsList = () => {
-      navigation.navigate('MainStack');
+      navigation.navigate('CocktailApp');
     };
   
     const renderItem = ({ item }) => (
@@ -49,83 +49,83 @@ const FavoriteCocktails = ({ favorites, toggleFavorite }) => {
     );
   };
   
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#ffffff', 
-      paddingTop: 20, 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#ffffff', 
+    paddingTop: 20, 
+  },
+  title: {
+    fontSize: 24, 
+    fontWeight: 'bold',
+    color: '#333', 
+    marginVertical: 20, 
+  },
+  cocktailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15, 
+    paddingHorizontal: 10,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd', 
+    backgroundColor: '#f9f9f9', 
+    borderRadius: 10, 
+    marginVertical: 5, 
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    title: {
-      fontSize: 24, 
-      fontWeight: 'bold',
-      color: '#333', 
-      marginVertical: 20, 
-    },
-    cocktailItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 15, 
-      paddingHorizontal: 10,
-      width: '100%',
-      borderBottomWidth: 1,
-      borderBottomColor: '#ddd', 
-      backgroundColor: '#f9f9f9', 
-      borderRadius: 10, 
-      marginVertical: 5, 
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 3.84,
-      elevation: 5, 
-    },
-    detailTouchable: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    thumbnail: {
-      width: 60, 
-      height: 60,
-      borderRadius: 30, 
-      marginRight: 15,
-    },
-    cocktailName: {
-      fontSize: 18,
-      fontWeight: '500', 
-      color: '#444', 
-    },
-    deleteButton: {
-      padding: 8, 
-      backgroundColor: 'rgba(255, 0, 0, 0.1)', 
-      borderRadius: 15, 
-    },
-    deleteButtonText: {
-      fontSize: 18, 
-      color: '#ff0000', 
-    },
-    flatList: {
-      width: '100%',
-    },
-    noFavoritesContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 20, 
-    },
-    noFavoritesText: {
-      fontSize: 20,
-      textAlign: 'center',
-      marginBottom: 15, 
-    },
-    goToCocktailsText: {
-      fontSize: 18,
-      color: '#007bff', 
-      textDecorationLine: 'underline',
-    },
-  });
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5, 
+  },
+  detailTouchable: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  thumbnail: {
+    width: 60, 
+    height: 60,
+    borderRadius: 30, 
+    marginRight: 15,
+  },
+  cocktailName: {
+    fontSize: 18,
+    fontWeight: '500', 
+    color: '#444', 
+  },
+  deleteButton: {
+    padding: 8, 
+    backgroundColor: 'rgba(255, 0, 0, 0.1)', 
+    borderRadius: 15, 
+  },
+  deleteButtonText: {
+    fontSize: 18, 
+    color: '#ff0000', 
+  },
+  flatList: {
+    width: '100%',
+  },
+  noFavoritesContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20, 
+  },
+  noFavoritesText: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 15, 
+  },
+  goToCocktailsText: {
+    fontSize: 18,
+    color: '#007bff', 
+    textDecorationLine: 'underline',
+  },
+});
 
 export default FavoriteCocktails;

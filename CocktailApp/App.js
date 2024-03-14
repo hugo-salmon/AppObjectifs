@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import CocktailsList from './CocktailsListScreen';
-import CocktailDetails from './CocktailDetails';
-import FavoriteCocktails from './FavoriteCocktailsScreen'; 
+import CocktailsList from './components/CocktailsListScreen';
+import CocktailDetails from './components/CocktailDetails';
+import FavoriteCocktails from './components/FavoriteCocktailsScreen'; 
+import RandomCocktail from './components/RandomCocktailScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -41,6 +41,8 @@ const App = () => {
       </Tab.Screen>
       <Tab.Screen name="Favoris" options={{ tabBarLabel: 'Favoris' }}>
         {() => <FavoriteCocktails favorites={favorites} toggleFavorite={toggleFavorite} />}
+      </Tab.Screen>
+      <Tab.Screen name="Cocktail aléatoire" component={RandomCocktail} options={{ tabBarLabel: 'Cocktail aléatoire'}}>
       </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
