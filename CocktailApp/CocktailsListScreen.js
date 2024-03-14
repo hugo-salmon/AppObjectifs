@@ -2,58 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const CocktailsList = () => {
+const CocktailsList = ({ favorites, toggleFavorite }) => {
   const navigation = useNavigation();
   const [cocktails, setCocktails] = useState([]);
   const [filteredCocktails, setFilteredCocktails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  
-  const navigateToCocktailDetails = (idDrink) => {
-    if (idDrink) {
-      navigation.navigate('CocktailDetails', { idDrink });
-    } else {
-      console.error('ID not provided for navigation to CocktailDetails');
-    }
-  };
-
-  const loadCocktailsByLetter = async (letter) => {
-    try {
-      const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${encodeURIComponent(letter)}`);
-      const data = await response.json();
-      return data.drinks || [];
-    } catch (error) {
-      console.error(`Error fetching data for letter ${letter}:`, error);
-      return [];
-    }
-  };
-
-  const loadAllCocktails = async () => {
-    try {
-      const allCocktails = [];
-      for (const letter of alphabet) {
-        const cocktailsByLetter = await loadCocktailsByLetter(letter);
-        allCocktails.push(...cocktailsByLetter);
-      }
-      setCocktails(allCocktails); 
-      setFilteredCocktails(allCocktails); 
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching all cocktails:', error);
-    }
-  };
 
   useEffect(() => {
-    loadAllCocktails(); 
+    loadAllCocktails();
   }, []);
 
+  const loadAllCocktails = async () => {
+    setLoading(true);
+    try {
+      const allCocktails = [];
+      for (const letter of 'abcdefghijklmnopqrstuvwxyz') {
+        const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${encodeURIComponent(letter)}`);
+        const data = await response.json();
+        if (data.drinks) {
+          allCocktails.push(...data.drinks);
+        }
+      }
+      setCocktails(allCocktails);
+      setFilteredCocktails(allCocktails);
+    } catch (error) {
+      console.error('Erreur dans la récupération de tous les cocktails :', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSearch = (text) => {
-    setSearchText(text); 
-    const filtered = cocktails.filter(cocktail =>
-      cocktail.strDrink.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredCocktails(filtered); 
+    const searchTextTrimmed = text.replace(/\s+/g, '').toLowerCase();
+    setSearchText(text);
+    if (!searchTextTrimmed) {
+      setFilteredCocktails(cocktails);
+    } else {
+      const filtered = cocktails.filter(cocktail =>
+        cocktail.strDrink.replace(/\s+/g, '').toLowerCase().includes(searchTextTrimmed)
+      );
+      setFilteredCocktails(filtered);
+    }
+  };
+
+  const clearSearchText = () => {
+    setSearchText('');
+    setFilteredCocktails(cocktails);
+  };
+
+  const navigateToCocktailDetails = (idDrink) => {
+    navigation.navigate('CocktailDetails', { idDrink });
   };
 
   const renderItem = ({ item }) => (
@@ -61,6 +60,9 @@ const CocktailsList = () => {
       <View style={styles.cocktailItem}>
         <Image source={{ uri: item.strDrinkThumb }} style={styles.thumbnail} />
         <Text style={styles.cocktailName}>{item.strDrink}</Text>
+        <TouchableOpacity onPress={() => toggleFavorite(item)}>
+          <Text style={styles.favorite}>{favorites.find(fav => fav.idDrink === item.idDrink) ? '❤️' : '🤍'}</Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -70,60 +72,98 @@ const CocktailsList = () => {
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <>
+        <View style={styles.searchContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Search cocktail..."
+            placeholder="Rechercher un cocktail..."
             onChangeText={handleSearch}
             value={searchText}
           />
-          <FlatList
-            data={filteredCocktails}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.idDrink}
-            style={styles.flatList}
-          />
-        </>
+          {searchText && (
+            <TouchableOpacity onPress={clearSearchText} style={styles.clearButton}>
+              <Text style={styles.clearButtonText}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+      {!loading && filteredCocktails.length === 0 ? (
+        <Text style={styles.noResultsText}>Aucun résultat.</Text>
+      ) : (
+        <FlatList
+          data={filteredCocktails}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.idDrink}
+          style={styles.flatList}
+        />
       )}
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 20, 
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5fcff',
+    backgroundColor: '#FAFAFA', 
   },
-  input: {
+  searchContainer: {
+    flexDirection: 'row',
     width: '90%',
     height: 40,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    borderColor: '#E0E0E0', 
+    borderRadius: 20, 
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF', 
+  },
+  input: {
+    flex: 1,
+    marginRight: 10, 
+  },
+  clearButton: {
+    padding: 5, 
+  },
+  clearButtonText: {
+    fontSize: 20,
+    color: '#606060', 
   },
   cocktailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#E0E0E0', 
+    width: '100%',
   },
   thumbnail: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
+    width: 60, 
+    height: 60,
+    borderRadius: 30, 
+    marginRight: 15,
   },
   cocktailName: {
     fontSize: 18,
+    flex: 1,
+    fontWeight: 'bold', 
+  },
+  favorite: {
+    fontSize: 22, 
+    color: '#FF6347', 
   },
   flatList: {
     width: '100%',
   },
+  noResultsText: {
+    fontSize: 18,
+    marginTop: 50, 
+    color: '#606060', 
+  },
 });
+
 
 export default CocktailsList;

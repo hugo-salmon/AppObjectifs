@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
 
 const CocktailDetails = ({ route }) => {
   const { idDrink } = route.params;
@@ -20,7 +20,7 @@ const CocktailDetails = ({ route }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error('Error fetching cocktail details:', error);
+        console.error("Erreur dans l'extraction des détails du cocktail :", error);
         setError(true);
         setLoading(false);
       }
@@ -34,23 +34,28 @@ const CocktailDetails = ({ route }) => {
   }
 
   if (error) {
-    return <Text>Error fetching cocktail details. Please try again later.</Text>;
+    return <Text>Erreur dans la récupération des détails du cocktail. Veuillez réessayer plus tard.</Text>;
   }
 
   if (!cocktailDetails) {
-    return <Text>No details available for this cocktail.</Text>;
+    return <Text>Détails non disponibles pour ce cocktail.</Text>;
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{cocktailDetails.strDrink}</Text>
-      <Image source={{ uri: cocktailDetails.strDrinkThumb }} style={styles.thumbnail} />
-      <Text style={styles.subtitle}>Cocktail Type: {cocktailDetails.strAlcoholic}</Text>
-      <Text style={styles.subtitle}>Ingredients:</Text>
-      <View style={styles.ingredientsContainer}>
-        {renderIngredients(cocktailDetails)}
-      </View>
-    </View>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          <Text style={styles.title}>{cocktailDetails.strDrink}</Text>
+          <Image source={{ uri: cocktailDetails.strDrinkThumb }} style={styles.thumbnail} />
+          <Text style={styles.subtitle}>Type de cocktail: {cocktailDetails.strAlcoholic}</Text>
+          <Text style={styles.subtitle}>Ingrédients:</Text>
+          <View style={styles.ingredientsContainer}>
+            {renderIngredients(cocktailDetails)}
+          </View>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 
@@ -70,40 +75,59 @@ const renderIngredients = (cocktailDetails) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    textAlign: 'center',
-  },
-  thumbnail: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
-    borderRadius: 10,
-  },
-  ingredientsContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  ingredient: {
-    fontSize: 16,
-    marginBottom: 5,
-    textAlign: 'center',
-  },
-});
+    scrollView: {
+        backgroundColor: '#FFFFFF',
+      },
+      container: {
+        flex: 1,
+        padding: 20,
+        alignItems: 'center',
+        paddingBottom: 50, 
+      },
+    title: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: '#2E2E2E', 
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+    subtitle: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: '#4F4F4F',
+      marginTop: 10,
+      textAlign: 'left',
+      alignSelf: 'stretch',
+    },
+    thumbnail: {
+      width: 320,
+      height: 320,
+      borderRadius: 160,
+      marginBottom: 20,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.30,
+      shadowRadius: 4.65,
+      elevation: 8,
+    },
+    ingredientsContainer: {
+      alignSelf: 'stretch',
+      alignItems: 'flex-start',
+      marginTop: 10,
+    },
+    ingredient: {
+      fontSize: 17,
+      color: '#3C3C3C',
+      backgroundColor: '#EFEFEF', 
+      borderRadius: 5,
+      padding: 5,
+      marginBottom: 5,
+      overflow: 'hidden', 
+      textAlign: 'left',
+    },
+  });
 
 export default CocktailDetails;
