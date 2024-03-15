@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, S
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LottieView from 'lottie-react-native';
+import { Dimensions } from 'react-native';
 
 const CocktailsList = ({ favorites, toggleFavorite }) => {
   const navigation = useNavigation();
@@ -73,6 +74,8 @@ const CocktailsList = ({ favorites, toggleFavorite }) => {
   };
 
   const handleLetterSelection = (letter) => {
+    const windowWidth = Dimensions.get('window').width;
+    const halfScreen = windowWidth / 2; 
     if (selectedLetter === letter) {
       setSelectedLetter('Tout');
       setFilteredCocktails(cocktails);
