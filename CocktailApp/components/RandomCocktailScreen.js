@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import LottieView from 'lottie-react-native';
+
 
 const RandomCocktail = () => {
   const [cocktail, setCocktail] = useState(null);
@@ -30,7 +32,16 @@ const RandomCocktail = () => {
   };
 
   if (loading) {
-    return <View style={styles.centered}><ActivityIndicator size="large" color="#0000ff" /></View>;
+    return (
+      <View style={styles.centered}>
+        <LottieView
+          source={require('../assets/lottie/cocktail_loader.json')}
+          autoPlay
+          loop
+          style={styles.lottieLoader}
+        />
+      </View>
+    );
   }
 
   if (error || !cocktail) {
@@ -112,7 +123,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  lottieLoader: {
+    width: 200,
+    height: 200, 
+  }
 });
-
 
 export default RandomCocktail;

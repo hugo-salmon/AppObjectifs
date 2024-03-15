@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import LottieView from 'lottie-react-native';
 
 const CocktailsList = ({ favorites, toggleFavorite }) => {
   const navigation = useNavigation();
@@ -9,7 +10,18 @@ const CocktailsList = ({ favorites, toggleFavorite }) => {
   const [filteredCocktails, setFilteredCocktails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
+  const [selectedLetter, setSelectedLetter] = useState('Tout');
   const flatListRef = useRef();
+  const letters = ['Tout', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+  const lettersRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedLetter !== 'Tout') {
+      setFilteredCocktails(cocktails.filter(cocktail => cocktail.strDrink.startsWith(selectedLetter)));
+    } else {
+      setFilteredCocktails(cocktails);
+    }
+  }, [selectedLetter, cocktails]);
 
   useEffect(() => {
     loadAllCocktails();
@@ -57,8 +69,48 @@ const CocktailsList = ({ favorites, toggleFavorite }) => {
   };
 
   const navigateToCocktailDetails = (idDrink) => {
-    navigation.navigate('CocktailDetails', { idDrink });
+    navigation.navigate('CocktailDetails', { idDrink: idDrink, favorites:favorites, toggleFavorite:toggleFavorite });
   };
+
+  const handleLetterSelection = (letter) => {
+    if (selectedLetter === letter) {
+      setSelectedLetter('Tout');
+      setFilteredCocktails(cocktails);
+      lettersRef.current.scrollToOffset({ offset: 0, animated: true });
+    } else {
+      setSelectedLetter(letter);
+      setSearchText('');
+
+      if (letter !== 'Tout') {
+        const index = letters.indexOf(letter);
+        if (index !== -1 && lettersRef.current) {
+          const itemWidth = 40; 
+          let offset = (index * itemWidth) - halfScreen + (itemWidth / 2);
+
+          if (letters.slice(-4).includes(letter)) {
+            const adjustement = -40; 
+            offset -= adjustement;
+          } else {
+            const adjustement = -70; 
+            offset -= adjustement;
+          }
+
+          offset = Math.max(0, offset);
+          lettersRef.current.scrollToOffset({ offset, animated: true });
+        }
+      } else {
+        lettersRef.current.scrollToOffset({ offset: 0, animated: true });
+      }
+    }
+  };
+  
+  const renderLetterItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleLetterSelection(item)}>
+      <View style={[styles.letterItem, selectedLetter === item ? styles.selectedLetterItem : {}]}>
+        <Text style={styles.letterText}>{item}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigateToCocktailDetails(item.idDrink)}>
@@ -77,9 +129,28 @@ const CocktailsList = ({ favorites, toggleFavorite }) => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <View style={styles.centered}>
+              <LottieView
+                source={require('../assets/lottie/cocktail_loader.json')}
+                autoPlay
+                loop
+                style={styles.lottieLoader}
+              />
+          </View>
         ) : (
           <>
+            <View style={styles.filterContainer}>
+              <Text style={styles.filterByText}>Filtrer par lettre:</Text>
+              <FlatList
+                horizontal
+                data={letters}
+                renderItem={renderLetterItem}
+                keyExtractor={item => item}
+                ref={lettersRef}
+                showsHorizontalScrollIndicator={false}
+                style={styles.lettersList}
+              />
+            </View>
             <View style={styles.searchContainer}>
               <TextInput
                 style={styles.input}
@@ -190,7 +261,43 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 10,
   },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  lottieLoader: {
+    width: 200,
+    height: 200, 
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingHorizontal: 20,
+    marginBottom: 15, 
+  },
+  filterByText: {
+    marginRight: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  letterItem: {
+    padding: 8, 
+    marginHorizontal: 5,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+  },
+  selectedLetterItem: {
+    backgroundColor: '#007bff',
+  },
+  letterText: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 18, 
+  },
 });
-
 
 export default CocktailsList;

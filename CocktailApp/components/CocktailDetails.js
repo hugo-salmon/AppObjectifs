@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import LottieView from 'lottie-react-native';
 
 const CocktailDetails = ({ route }) => {
-  const { idDrink } = route.params;
+  const { idDrink, favorites, toggleFavorite } = route.params;
   const [cocktailDetails, setCocktailDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(favorites.some(fav => fav.idDrink === idDrink));
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(cocktailDetails);
+    setIsFavorite(!isFavorite); 
+  };
 
   useEffect(() => {
     const fetchCocktailDetails = async () => {
@@ -17,12 +25,12 @@ const CocktailDetails = ({ route }) => {
           setLoading(false);
         } else {
           setError(true);
-          setLoading(false);
+          setLoading(true);
         }
       } catch (error) {
         console.error("Erreur dans l'extraction des détails du cocktail :", error);
         setError(true);
-        setLoading(false);
+        setLoading(true);
       }
     };
     
@@ -30,7 +38,16 @@ const CocktailDetails = ({ route }) => {
   }, [idDrink]);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return(
+      <View style={styles.centered}>
+        <LottieView
+          source={require('../assets/lottie/cocktail_loader.json')}
+          autoPlay
+          loop
+          style={styles.lottieLoader}
+        />
+    </View>
+    );
   }
 
   if (error) {
@@ -47,6 +64,9 @@ const CocktailDetails = ({ route }) => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <Text style={styles.title}>{cocktailDetails.strDrink}</Text>
+          <TouchableOpacity onPress={handleToggleFavorite} style={styles.favoriteIcon}>
+            <Icon name={isFavorite ? 'heart' : 'heart-o'} size={24} color="red" />
+          </TouchableOpacity>
           <Image source={{ uri: cocktailDetails.strDrinkThumb }} style={styles.thumbnail} />
           <Text style={styles.subtitle}>Type de cocktail: {cocktailDetails.strAlcoholic}</Text>
           <Text style={styles.subtitle}>Ingrédients:</Text>
@@ -126,6 +146,28 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     overflow: 'hidden', 
     textAlign: 'left',
+  },
+  favoriteIcon: {
+    position: 'absolute', 
+    top: 10, 
+    right: 10, 
+    padding: 8, 
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', 
+    borderRadius: 20, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  lottieLoader: {
+    width: 200,
+    height: 200, 
   }
 });
 

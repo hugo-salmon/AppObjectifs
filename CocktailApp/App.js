@@ -36,12 +36,16 @@ const App = () => {
   const [favorites, setFavorites] = useState([]);
 
   const toggleFavorite = (cocktail) => {
-    const isFavorite = favorites.some(fav => fav.idDrink === cocktail.idDrink);
-    if (isFavorite) {
-      setFavorites(favorites.filter(fav => fav.idDrink !== cocktail.idDrink));
-    } else {
-      setFavorites(prevFavorites => [...prevFavorites, cocktail]);
-    }
+    setFavorites(currentFavorites => {
+      const isFavoriteIndex = currentFavorites.findIndex(fav => fav.idDrink === cocktail.idDrink);
+      if (isFavoriteIndex >= 0) {
+        const newFavorites = [...currentFavorites];
+        newFavorites.splice(isFavoriteIndex, 1);
+        return newFavorites;
+      } else {
+        return [...currentFavorites, cocktail];
+      }
+    });
   };
   const clearAllFavorites = () => {
     setFavorites([]); 
