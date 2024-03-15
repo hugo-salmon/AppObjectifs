@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -73,43 +73,47 @@ const CocktailsList = ({ favorites, toggleFavorite }) => {
   );
 
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Rechercher un cocktail..."
-              onChangeText={handleSearch}
-              value={searchText}
-            />
-            {searchText && (
-              <TouchableOpacity onPress={clearSearchText} style={styles.clearButton}>
-                <Icon name="times" size={24} color="#000" />
-              </TouchableOpacity>
-            )}
-          </View>
-          {filteredCocktails.length === 0 ? (
-            <Text style={styles.noResultsText}>Aucun résultat.</Text>
-          ) : (
-            <>
-              <FlatList
-                data={filteredCocktails}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.idDrink.toString()}
-                ref={flatListRef}
-                style={styles.flatList}
+    <>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.container}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Rechercher un cocktail..."
+                onChangeText={handleSearch}
+                value={searchText}
               />
-              <TouchableOpacity style={styles.scrollToTopButton} onPress={scrollToTop}>
-                <Icon name="arrow-up" size={24} color="#fff" />
-              </TouchableOpacity>
-            </>
-          )}
-        </>
-      )}
+              {searchText && (
+                <TouchableOpacity onPress={clearSearchText} style={styles.clearButton}>
+                  <Icon name="times" size={24} color="#000" />
+                </TouchableOpacity>
+              )}
+            </View>
+            {filteredCocktails.length === 0 ? (
+              <Text style={styles.noResultsText}>Aucun résultat.</Text>
+            ) : (
+              <>
+                <FlatList
+                  data={filteredCocktails}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.idDrink.toString()}
+                  ref={flatListRef}
+                  style={styles.flatList}
+                />
+                <TouchableOpacity style={styles.scrollToTopButton} onPress={scrollToTop}>
+                  <Icon name="arrow-up" size={24} color="#fff" />
+                </TouchableOpacity>
+              </>
+            )}
+          </>
+        )}
     </View>
+    </>
+    
   );
 };
 

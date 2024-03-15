@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity, StatusBar } from 'react-native';
 
 const RandomCocktail = () => {
   const [cocktail, setCocktail] = useState(null);
@@ -35,25 +35,33 @@ const RandomCocktail = () => {
 
   if (error || !cocktail) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.text}>Impossible de charger un cocktail aléatoire. Veuillez réessayer.</Text>
-        <TouchableOpacity style={styles.button} onPress={fetchRandomCocktail}>
-          <Text style={styles.buttonText}>Réessayer</Text>
-        </TouchableOpacity>
-      </View>
+      <>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.centered}>
+          <Text style={styles.text}>Impossible de charger un cocktail aléatoire. Veuillez réessayer.</Text>
+          <TouchableOpacity style={styles.button} onPress={fetchRandomCocktail}>
+            <Text style={styles.buttonText}>Réessayer</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+      
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{cocktail.strDrink}</Text>
-      <Image source={{ uri: cocktail.strDrinkThumb }} style={styles.thumbnail} />
-      <Text style={styles.details}>Catégorie: {cocktail.strCategory}</Text>
-      <Text style={styles.details}>Type: {cocktail.strAlcoholic}</Text>
-      <TouchableOpacity style={styles.button} onPress={fetchRandomCocktail}>
-        <Text style={styles.buttonText}>Nouveau cocktail aléatoire</Text>
-      </TouchableOpacity>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.container}>
+        <Text style={styles.title}>{cocktail.strDrink}</Text>
+        <Image source={{ uri: cocktail.strDrinkThumb }} style={styles.thumbnail} />
+        <Text style={styles.details}>Catégorie: {cocktail.strCategory}</Text>
+        <Text style={styles.details}>Type: {cocktail.strAlcoholic}</Text>
+        <TouchableOpacity style={styles.button} onPress={fetchRandomCocktail}>
+          <Text style={styles.buttonText}>Nouveau cocktail aléatoire</Text>
+        </TouchableOpacity>
     </View>
+    </>
+    
   );
 };
 

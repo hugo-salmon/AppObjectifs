@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -43,15 +43,19 @@ const FavoriteCocktails = ({ favorites, toggleFavorite, clearAllFavorites }) => 
     );
   
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Cocktails Favoris</Text>
-        {favorites.length > 0 && (
-          <TouchableOpacity onPress={clearAllFavorites} style={styles.clearAllButton}>
-            <Text style={styles.clearAllButtonText}>Tout supprimer</Text>
-          </TouchableOpacity>
-        )}
-        {content}
-      </View>
+      <>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.container}>
+          <Text style={styles.title}>Cocktails Favoris</Text>
+          {favorites.length > 0 && (
+            <TouchableOpacity onPress={clearAllFavorites} style={styles.clearAllButton}>
+              <Text style={styles.clearAllButtonText}>Tout supprimer</Text>
+            </TouchableOpacity>
+          )}
+          {content}
+        </View>
+      </>
+      
     );
   };
   
