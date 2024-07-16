@@ -1,3 +1,8 @@
+3 apps en React Native:
+- Une qui permet de rentrer des objectifs, les modifier, les supprimer ou bien les valider (comme une to do list)
+- Une qui affiche la météo actuelle et les prévisions météo des prochains jours par rapport à la localisation actuelle (api openweathermap)
+- Une qui permet d'afficher une liste de cocktails, voir le détail de chacun, en chercher un, cocktail aléatoire... (utilisation d'une API également).
+
 Informations/remarques sur le projet:
 - Il est possible de devoir installer des dépendances/bibliothèques pour lancer les apps de votre côté
 - Sur l'app de cocktails, au lancement du projet, il est possible d'avoir une erreur "d'array", c'est une erreur que j'ai eue, que je n'ai pas réussi à régler. Vous avez juste à cliquer sur "Dismiss",
